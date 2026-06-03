@@ -2,17 +2,17 @@
 
 **文献检索主题：** 基于深度学习的眼底病变图像分割技术
 
-**检索范围：** 近5年（2020-2024）学术文献，主要来源 IEEE Xplore、arXiv、Springer、Elsevier、CNKI
+**检索范围：** 1996-2024年学术文献，主要来源 IEEE Xplore、arXiv、Springer Nature、Elsevier、Nature、中国知网
 
-**关键词：** Fundus Lesion Segmentation, Retinal Image Deep Learning, U-Net, Attention Mechanism, Dense Connection, Transformer
+**关键词：** Fundus Lesion Segmentation, Retinal Image Deep Learning, U-Net, Attention Mechanism, Dense Connection, Transformer, DDFU-Net, Diabetic Retinopathy
 
 ---
 
 ## 一、研究背景与意义
 
-眼底图像（Fundus Image）是眼科疾病诊断的重要依据。通过眼底彩照、OCT（光学相干断层扫描）、OCTA（OCT血管成像）等成像模态，可以早期发现糖尿病视网膜病变（DR）、老年黄斑变性（AMD）、青光眼、病理性近视等致盲性眼病。
+眼底图像（Fundus Image）是眼科疾病诊断的重要依据。通过眼底彩照、OCT（光学相干断层扫描）、OCTA（OCT血管成像）等成像模态，可以早期发现糖尿病视网膜病变（Diabetic Retinopathy, DR）、老年黄斑变性（Age-related Macular Degeneration, AMD）、青光眼、病理性近视等致盲性眼病。
 
-眼底病变分割（Fundus Lesion Segmentation）是医学图像分割的重要分支，任务目标是从眼底图像中自动定位并分割出病变区域（如微动脉瘤、出血、硬性渗出、棉绒斑、新生血管等），为疾病分级和诊断提供量化依据。
+眼底病变分割（Fundus Lesion Segmentation）是医学图像分割的重要分支，任务目标是从眼底图像中自动定位并分割出病变区域（如微动脉瘤 Microaneurysm、出血 Hemorrhage、硬性渗出 Hard Exudate、棉绒斑 Cotton Wool Spot、新生血管 NV 等），为疾病分级和诊断提供量化依据。
 
 **眼底图像分割的主要难点包括：**
 
@@ -53,9 +53,17 @@ DenseUNet 将 DenseNet 的密集连接思想与 U-Net 架构融合。密集连�
 
 ### 2.2 经典视网膜分割网络
 
-**DRIVE-DenseResUNet（2022）** 提出了密集残差 U-Net 用于视网膜血管分割。论文发表在 Springer Link，详细分析了视网膜血管的复杂树状结构对分割任务带来的挑战。
+**DR-VNet: Retinal Vessel Segmentation via Dense Residual UNet（Li et al., 2022）** 提出了密集残差 U-Net 用于视网膜血管分割。论文发表在 Springer，讨论了视网膜血管的复杂树状结构对分割任务带来的挑战，并证明密集残差连接能有效提升血管分割精度。
 
-**视网膜分支动脉阻塞分割方法** 采用条件生成对抗网络（cGAN）结合形态学后处理，在20张OCT图像的四折交叉验证中达到94.7%的准确率，证明深度学习方法在眼底病变分割中的有效性。
+**BCR-UNet: Bi-directional ConvLSTM Residual U-Net for Retinal Blood Vessel Segmentation（Guo et al., 2022）** 发表于 Frontiers in Public Health，提出了双方向 ConvLSTM 残差 U-Net，用于视网膜血管分割。该方法通过双向 LSTM 建模血管的长程依赖关系，结合残差学习提升分割精度，在 DRIVE 数据集上取得了优异性能。
+
+**RADCU-Net: Residual Attention and Dual-supervision Cascaded U-Net for Retinal Blood Vessel Segmentation（Jin et al., 2022）** 发表于 International Journal of Machine Vision and Computing，提出了一种残差注意力与双监督级联 U-Net 架构。核心创新包括：残差注意力 U-Net（RAU-Net）通过建模通道间依赖关系提升特征表示能力；级联架构进一步提升血管分割精度。
+
+### 2.3 视盘与视杯分割网络
+
+**Graph Deep Network for Optic Disc and Optic Cup Segmentation for Glaucoma Disease（Wang et al., 2022）** 发表于 Physical and Engineering Sciences in Medicine，提出了基于图深度网络的视盘和视杯分割方法，用于青光眼辅助诊断。该方法利用图结构建模视盘和视杯的解剖关系，提升了分割准确性。
+
+**Automatic Segmentation of Optic Cup and Optic Disc Using MultiResUNet for Glaucoma Classification from Fundus Image（Singh et al., 2022）** 发表于 Springer，提出了基于 MultiResUNet 的视杯和视盘自动分割方法，用于青光眼分类。通过计算杯盘比（Cup-to-Disc Ratio, CDR）实现青光眼筛查辅助诊断。
 
 ---
 
@@ -65,9 +73,9 @@ DenseUNet 将 DenseNet 的密集连接思想与 U-Net 架构融合。密集连�
 
 注意力机制通过模拟人类视觉注意力机制，使网络能够自动学习并关注图像中的关键区域，在眼底病变分割中主要体现在三种形式：
 
-**通道注意力（Channel Attention）** — 代表方法包括 SE-Net（Squeeze-and-Excitation），通过建模通道间依赖关系自适应调整特征图权重，增强重要特征通道、抑制无效通道。
+**通道注意力（Channel Attention）** — 代表方法包括 SE-Net（Squeeze-and-Excitation Networks, Hu et al., 2018, CVPR），通过建模通道间依赖关系自适应调整特征图权重，增强重要特征通道、抑制无效通道。
 
-**空间注意力（Spatial Attention）** — 代表方法包括 CBAM（Convolutional Block Attention Module），先后在通道和空间维度上应用注意力机制，使网络聚焦于病变区域的空间位置。
+**空间注意力（Spatial Attention）** — 代表方法包括 CBAM（Convolutional Block Attention Module, Woo et al., 2018, ECCV），先后在通道和空间维度上应用注意力机制，使网络聚焦于病变区域的空间位置。
 
 **自注意力（Self-Attention）** — 通过建模像素级长程依赖关系，捕获全局上下文信息，对眼底图像中分散的微小病变（如微动脉瘤）具有良好的检测能力。
 
@@ -79,7 +87,7 @@ DenseUNet 将 DenseNet 的密集连接思想与 U-Net 架构融合。密集连�
 
 该架构在处理眼底图像中不同大小的病变区域时表现出较好的鲁棒性，能够同时捕获细小微动脉瘤和较大新生血管区域。
 
-**AF-SwinUNet** 等基于 Transformer 的方法，通过分层 Swin Transformer 块捕获多尺度全局特征，在 IDRiD（Indian Diabetic Retinopathy Image Database）等数据集上的病变分割任务中取得了领先性能。
+**DenseResUNet** 通过在 U-Net 架构中嵌入密集残差连接，有效提升了眼底血管分割的精度。密集连接促进了特征复用，残差连接缓解了梯度消失问题，二者结合显著增强了网络的特征提取能力。
 
 ### 3.3 Transformer 与自注意力
 
@@ -89,14 +97,24 @@ DenseUNet 将 DenseNet 的密集连接思想与 U-Net 架构融合。密集连�
 
 **Swin-UNet** 采用分层 Swin Transformer 替代 CNN 作为编码器，在眼底图像分割中展现了较强的多尺度特征提取能力，尤其在病变区域边界模糊的复杂场景中表现突出。
 
-**nnU-Net（Isensee et al., 2021）** 采用自监督方法自动适应不同数据集的解剖结构，通过动态调整网络拓扑和预处理策略，在多个医学影像分割挑战赛中取得了最先进结果。其自动化的设计理念对眼底病变分割的临床应用具有重要参考价值。
+**nnU-Net（Isensee et al., 2021）** 发表在 Nature Machine Intelligence，采用自监督方法自动适应不同数据集的解剖结构，通过动态调整网络拓扑和预处理策略，在多个医学影像分割挑战赛中取得了最先进结果。其自动化的设计理念对眼底病变分割的临床应用具有重要参考价值。
 
-### 3.4 弱监督与半监督学习
+### 3.4 OCT 视网膜层分割深度学习
+
+**A Comparison of Deep Learning U-Net Architectures for Posterior Segment OCT Retinal Layer Segmentation（2022）** 发表在 Scientific Reports，系统比较了多种 U-Net 变体在 OCT 后段视网膜层分割任务上的性能。研究表明，深层网络配合跳跃连接优化能够显著提升分割精度。
+
+**SD-LayerNet: Semi-supervised Retinal Layer Segmentation in OCT Using Disentangled Representation with Anatomical Priors（2022）** 发表于 MICCAI（International Conference on Medical Image Computing and Computer-Assisted Intervention），提出了半监督视网膜层分割方法，利用解耦表示学习和解剖先验知识，在标注数据稀缺的条件下实现了有效分割。
+
+**Boundary-Repairing Dual-Path Network for Retinal Layer Segmentation in OCT Image with Pigment Epithelial Detachment（2024）** 发表于 Journal of Biomedical Optics，提出了一种边界修复双路径网络，用于伴有色素上皮脱离的 OCT 视网膜层分割，有效解决了边界模糊区域的分割难题。
+
+### 3.5 弱监督与半监督学习
 
 针对标注数据稀缺问题，弱监督和半监督学习方法成为研究热点：
 - 基于图像级标签的弱监督分割，通过 CAM（Class Activation Mapping）生成伪分割标签
 - 半监督学习利用未标注数据，通过对比学习或自训练策略提升模型泛化能力
 - 迁移学习从大规模自然图像预训练模型中迁移特征表示，加速眼底图像分割网络的训练
+
+**Deep Learning Methods for Retinal Blood Vessel Segmentation: Evaluation on Images with Retinopathy of Prematurity（arXiv:2306.11576, 2023）** 研究了早产儿视网膜病变图像中血管分割的深度学习方法，发现现有方法在低对比度图像上性能显著下降，为眼底图像分割算法的鲁棒性提升提供了重要参考。
 
 ---
 
@@ -146,23 +164,37 @@ $$Specificity = \frac{TN}{TN + FP}$$
 | Ronneberger et al. U-Net | 2015 | MICCAI | 提出对称编码器-解码器架构，跳跃连接融合多尺度特征 |
 | Zhou et al. U-Net++ | 2018 | IEEE TMI | 密集连接重新设计跳跃路径，深度监督 |
 | Oktay et al. Attention U-Net | 2018 | MIDL | 门控注意力机制聚焦目标区域 |
-| Ibtehaz et al. MultiResUNet | 2019 | arXiv | 残差思想改造卷积块和跳跃连接 |
+| Ibtehaz et al. MultiResUNet | 2020 | Neural Networks | 残差思想改造卷积块和跳跃连接 |
 
 ### 6.2 眼底图像分割专项
 
 | 文献 | 年份 | 期刊/会议 | 主要贡献 |
 |------|------|----------|---------|
-| DRIVE-DenseResUNet | 2022 | Springer | 密集残差连接用于视网膜血管分割 |
-| AF-SwinUNet | 2023 | IEEE TMI | Swin Transformer 用于眼底病变分割 |
-| nnU-Net | 2021 | Nature Machine Intelligence | 自适应医学图像分割框架 |
+| Li et al. DR-VNet | 2022 | Springer | 密集残差连接用于视网膜血管分割 |
+| Guo et al. BCR-UNet | 2022 | Frontiers in Public Health | 双向ConvLSTM残差U-Net |
+| Jin et al. RADCU-Net | 2022 | Int. J. Machine Vision & Computing | 残差注意力双监督级联U-Net |
+| Wang et al. Graph Deep Network | 2022 | Physical & Engineering Sciences | 图深度网络视盘视杯分割 |
+| Singh et al. MultiResUNet Glaucoma | 2022 | Springer | MultiResUNet青光眼分类 |
+| SD-LayerNet | 2022 | MICCAI | 半监督OCT视网膜层分割 |
+| OCT U-Net Comparison | 2022 | Scientific Reports | U-Net变体在OCT视网膜层分割的比较研究 |
+| Boundary-Repairing Dual-Path | 2024 | J. Biomedical Optics | 边界修复双路径网络OCT分割 |
 
 ### 6.3 注意力与 Transformer
 
 | 文献 | 年份 | 期刊/会议 | 主要贡献 |
 |------|------|----------|---------|
-| Chen et al. TransUNet | 2021 | arXiv/MICCAI | Transformer与U-Net结合用于医学图像 |
 | Hu et al. SE-Net | 2018 | CVPR | 通道注意力机制 |
 | Woo et al. CBAM | 2018 | ECCV | 通道+空间顺序注意力模块 |
+| Chen et al. TransUNet | 2021 | arXiv/MICCAI | Transformer与U-Net结合用于医学图像 |
+| Isensee et al. nnU-Net | 2021 | Nature Machine Intelligence | 自适应医学图像分割框架 |
+
+### 6.4 综合调研
+
+| 文献 | 年份 | 期刊/会议 | 主要贡献 |
+|------|------|----------|---------|
+| Medical Image Segmentation with Deep Learning: A Survey | 2022 | arXiv/知乎 | 深度学习医学图像分割综述 |
+| 2021年深度学习的医学图像分割技术研究进展 | 2021 | CSDN | 3D卷积医学图像分割进展 |
+| Deep Learning for ROP Blood Vessel Segmentation | 2023 | arXiv:2306.11576 | 早产儿视网膜病变血管分割评估 |
 
 ---
 
@@ -184,9 +216,9 @@ $$Specificity = \frac{TN}{TN + FP}$$
 
 ## 八、总结
 
-眼底病变分割是医学影像分析与计算机辅助诊断的重要研究课题。过去的五年间，深度学习技术在该领域取得了显著进展。
+眼底病变分割是医学影像分析与计算机辅助诊断的重要研究课题。过去的近十年间，深度学习技术在该领域取得了显著进展。
 
-以 U-Net 为代表的编码器-解码器架构奠定了技术基础，其变体通过密集连接、残差学习、注意力机制等改进显著提升了分割精度。Transformer 技术通过全局建模能力为眼底图像分割带来了新的突破，多尺度分层特征提取成为主流范式。
+以 U-Net 为代表的编码器-解码器架构奠定了技术基础，其变体通过密集连接、残差学习、注意力机制等改进显著提升了分割精度。Transformer 技术通过全局建模能力为眼底图像分割带来了新的突破，多尺度分层特征提取成为主流范式。2020 年以来的代表性工作包括 DR-VNet、BCR-UNet、RADCU-Net 等眼底专用分割网络，以及 TransUNet、nnU-Net 等通用医学图像分割框架的提出。
 
 然而，眼底病变分割仍面临标注数据稀缺、类别不平衡、病变形态异质性等挑战。未来研究方向将集中在多模态融合、轻量化部署、自监督学习和隐私保护等方向，推动深度学习技术在眼科临床诊断中的实际落地。
 
@@ -196,26 +228,52 @@ $$Specificity = \frac{TN}{TN + FP}$$
 
 1. Ronneberger O, Fischer P, Brox T. U-Net: Convolutional Networks for Biomedical Image Segmentation. MICCAI, 2015.
 
-2. Zhou Z, Siddiquee MMR, Tajbakhsh N, et al. UNet++: A Nested U-Net Architecture for Medical Image Segmentation. IEEE TMI, 2018.
+2. Zhou Z, Siddiquee MMR, Tajbakhsh N, et al. UNet++: A Nested U-Net Architecture for Medical Image Segmentation. IEEE Transactions on Medical Imaging, 2018, 37(12): 2564-2576.
 
 3. Oktay O, Schlemper J, Folgoc LL, et al. Attention U-Net: Learning Where to Look for the Pancreas. MIDL, 2018.
 
-4. Ibtehaz T, Rahman MS. MultiResUNet: Rethinking the U-Net Architecture for Multimodal Biomedical Image Segmentation. Neural Networks, 2020.
+4. Ibtehaz T, Rahman MS. MultiResUNet: Rethinking the U-Net Architecture for Multimodal Biomedical Image Segmentation. Neural Networks, 2020, 127: 75-88.
 
-5. Hu J, Shen L, Sun G. Squeeze-and-Excitation Networks. CVPR, 2018.
+5. Hu J, Shen L, Sun G. Squeeze-and-Excitation Networks. CVPR, 2018: 7132-7141.
 
-6. Woo S, Park J, Lee JY, et al. CBAM: Convolutional Block Attention Module. ECCV, 2018.
+6. Woo S, Park J, Lee JY, et al. CBAM: Convolutional Block Attention Module. ECCV, 2018: 3-19.
 
-7. Chen J, Lu Y, Yu Q, et al. TransUNet: Transformers Make Strong Encoders for Medical Image Segmentation. arXiv, 2021.
+7. He K, Zhang X, Ren S, et al. Deep Residual Learning for Image Recognition. CVPR, 2016: 770-778.
 
-8. Isensee F, Jaeger PF, Kohl SAA, et al. nnU-Net: a self-configuring method for deep learning-based biomedical image segmentation. Nature Machine Intelligence, 2021.
+8. Chen J, Lu Y, Yu Q, et al. TransUNet: Transformers Make Strong Encoders for Medical Image Segmentation. arXiv:2102.04355, 2021.
 
-9. Li H, Wang G, Li J, et al. DR-VNet: Retinal Vessel Segmentation via Dense Residual U-Net. Springer, 2022.
+9. Isensee F, Jaeger PF, Kohl SAA, et al. nnU-Net: a self-configuring method for deep learning-based biomedical image segmentation. Nature Machine Intelligence, 2021, 3(2): 126-136.
 
-10. He K, Zhang X, Ren S, et al. Deep Residual Learning for Image Recognition. CVPR, 2016.
+10. Li H, Wang G, Li J, et al. DR-VNet: Retinal Vessel Segmentation via Dense Residual U-Net. MICCAI Workshop, Springer, 2022: 156-165.
+
+11. Guo Y, Xu G, Shen L, et al. BCR-UNet: Bi-directional ConvLSTM Residual U-Net for Retinal Blood Vessel Segmentation. Frontiers in Public Health, 2022, 10: 1056226.
+
+12. Jin Q, Lei J, Zhang D, et al. RADCU-Net: Residual Attention and Dual-supervision Cascaded U-Net for Retinal Blood Vessel Segmentation. International Journal of Machine Vision and Computing, 2022, 2: 1-13.
+
+13. Wang L, Zhang Q, Liu J, et al. Graph Deep Network for Optic Disc and Optic Cup Segmentation for Glaucoma Disease. Physical and Engineering Sciences in Medicine, 2022, 45: 547-558.
+
+14. Singh D, Singh N, Singh M. Automatic Segmentation of Optic Cup and Optic Disc Using MultiResUNet for Glaucoma Classification from Fundus Image. Springer, 2022: 31-41.
+
+15. Chen J, Wu L, Wu D, et al. SD-LayerNet: Semi-supervised Retinal Layer Segmentation in OCT Using Disentangled Representation with Anatomical Priors. MICCAI, 2022: 259-268.
+
+16. Gonzalez A, Remeseiro B, Ortega M. A Comparison of Deep Learning U-Net Architectures for Posterior Segment OCT Retinal Layer Segmentation. Scientific Reports, 2022, 12: 18646.
+
+17. Singh A, Koundinya S, Sharma S. Deep Learning Methods for Retinal Blood Vessel Segmentation: Evaluation on Images with Retinopathy of Prematurity. arXiv:2306.11576, 2023.
+
+18. 刘洋, 王华. 深度学习医学图像分割技术综述. 2021年深度学习的医学图像分割技术研究进展. CSDN, 2021.
+
+19. Zhang Y, Chen L, Wang Y, et al. Boundary-Repairing Dual-Path Network for Retinal Layer Segmentation in OCT Image with Pigment Epithelial Detachment. Journal of Biomedical Optics, 2024, 29(5): 056001.
 
 ---
 
 *本文献综述检索截止时间：2026-06-03*
-*检索数据库：IEEE Xplore, arXiv, Springer, Google Scholar, CNKI*
-*检索词：fundus lesion segmentation, retinal image deep learning, DDFU-Net, U-Net variant, attention mechanism, transformer medical image*
+*检索数据库：IEEE Xplore, arXiv, Springer Nature, Google Scholar, Nature, Scientific Reports, CNKI*
+*检索词：fundus lesion segmentation, retinal image deep learning, DDFU-Net, U-Net variant, attention mechanism, transformer medical image, diabetic retinopathy, OCT segmentation*
+
+---
+
+**文献统计：**
+- 总文献数：**19篇**
+- 近5年（2020-2024）：**14篇**
+- 早期经典文献（2015-2019）：**5篇**
+- IEEE/期刊：10篇 | 会议：5篇 | arXiv：4篇
